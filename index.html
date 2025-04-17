@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="pageTitle">انضم إلى نادي برشلونة</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-image: url('https://img.btolat.com/2025/1/23/news/362629/large.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: black;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-y: scroll;
+        }
+        header {
+            background-color: rgba(0, 51, 160, 0.8);
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 2px solid #fcb040;
+        }
+        header img {
+            width: 120px;
+            display: block;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 36px;
+            margin-top: 10px;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 8px;
+            color: black;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select {
+            background-color: rgba(255, 165, 0, 0.3);
+            color: black;
+        }
+        button {
+            background-color: #fcb040;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #e68920;
+        }
+        .footer-bar {
+            background-color: #0033a0;
+            color: white;
+            font-size: 7px;
+            padding: 5px 0;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+        }
+        .confirmation {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            color: #0033a0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 40px auto;
+            max-width: 800px;
+        }
+        .confirmation h2 {
+            text-align: center;
+        }
+        .confirmation p {
+            font-size: 18px;
+        }
+        .confirmation .request-number {
+            font-weight: bold;
+            color: #fcb040;
+        }
+        .qr-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .qr-container img {
+            width: 150px;
+            height: 150px;
+        }
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .message-container {
+            background-color: rgba(0, 51, 160, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+            width: 90%;
+            max-width: 800px;
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 28px;
+            }
+            label {
+                font-size: 14px;
+            }
+            input, select, button {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.fcbarcelona.com/photo-resources/2024/09/12/ca3eec96-5e67-4079-b8bd-982150fb27b3/1600x700_CAMPANYA-SOCIS_ENG.jpg?width=1600&height=700" alt="شعار نادي برشلونة">
+        <h1 id="headerTitle">انضم إلى نادي برشلونة</h1>
+    </header>
+
+    <div class="container" id="formContainer">
+        <h2 id="formTitle">استمارة التسجيل كعضو في النادي</h2>
+        <p id="formDescription">املأ البيانات التالية للانضمام إلى عائلة نادي برشلونة.</p>
+
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="fullName">الاسم الكامل</label>
+                <input type="text" id="fullName" name="fullName" placeholder="الاسم الكامل">
+            </div>
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني</label>
+                <input type="email" id="email" name="email" placeholder="البريد الإلكتروني">
+            </div>
+            <div class="form-group">
+                <label for="phone">رقم الهاتف</label>
+                <input type="tel" id="phone" name="phone" placeholder="رقم الهاتف">
+            </div>
+            <div class="form-group">
+                <label for="dob">تاريخ الميلاد</label>
+                <input type="date" id="dob" name="dob">
+            </div>
+            <div class="form-group">
+                <label for="address">العنوان الكامل</label>
+                <input type="text" id="address" name="address" placeholder="العنوان الكامل">
+            </div>
+            <div class="form-group">
+                <label for="idNumber">رقم الجواز أو الهوية الوطنية</label>
+                <input type="text" id="idNumber" name="idNumber" placeholder="رقم الجواز أو الهوية الوطنية">
+            </div>
+            <button type="button" onclick="submitForm()">تقديم الطلب</button>
+        </form>
+    </div>
+
+    <div class="loader" id="loader"></div>
+
+    <div class="confirmation" id="confirmationSection" style="display:none;">
+        <h2>تم تقديم الطلب بنجاح</h2>
+        <p>رقم الطلب: <span class="request-number" id="requestNumber">BR-215123</span></p>
+        <p><strong>البيانات المدخلة:</strong></p>
+        <ul id="submittedData"></ul>
+
+        <div class="qr-container" id="qrContainer">
+            <h3>QR Code</h3>
+            <div id="qrCode"></div>
+        </div>
+
+        <div style="text-align:center; margin-top: 20px;">
+            <button onclick="downloadAsPDF()">حفظ كمستند PDF</button>
+        </div>
+
+        <div style="text-align:center; margin-top: 20px;">
+            <button onclick="sendToWhatsapp()">إرسال إلى الواتساب</button>
+        </div>
+    </div>
+
+    <div class="message-container" id="messageContainer">
+        <p>يرجى إرسال البيانات إلى واتساب لضمان التقديم ...</p>
+    </div>
+
+    <div class="footer-bar">
+        <p>عضوية نادي برشلونة جميع الحقوق محفوظة</p>
+    </div>
+
+    <script>
+        var requestNumber = Math.floor(Math.random() * (9999999 - 1000 + 1)) + 1000;
+
+        function validateForm() {
+            var fields = ["fullName", "email", "phone", "dob", "address", "idNumber"];
+            for (var i = 0; i < fields.length; i++) {
+                if (!document.getElementById(fields[i]).value) {
+                    alert("الرجاء ملء جميع الحقول المطلوبة.");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function submitForm() {
+            if (validateForm()) {
+                document.getElementById("loader").style.display = "block";
+
+                setTimeout(function () {
+                    document.getElementById("formContainer").style.display = "none";
+                    document.getElementById("confirmationSection").style.display = "block";
+                    document.getElementById("loader").style.display = "none";
+
+                    document.getElementById("requestNumber").innerText = "BR-" + requestNumber;
+
+                    var fullName = document.getElementById("fullName").value;
+                    var email = document.getElementById("email").value;
+                    var phone = document.getElementById("phone").value;
+                    var dob = document.getElementById("dob").value;
+                    var address = document.getElementById("address").value;
+                    var idNumber = document.getElementById("idNumber").value;
+
+                    var submittedData = document.getElementById("submittedData");
+                    submittedData.innerHTML = `
+                        <li><strong>الاسم الكامل:</strong> ${fullName}</li>
+                        <li><strong>البريد الإلكتروني:</strong> ${email}</li>
+                        <li><strong>رقم الهاتف:</strong> ${phone}</li>
+                        <li><strong>تاريخ الميلاد:</strong> ${dob}</li>
+                        <li><strong>العنوان الكامل:</strong> ${address}</li>
+                        <li><strong>رقم الهوية:</strong> ${idNumber}</li>
+                    `;
+
+                    var dataToEncode = `الاسم الكامل: ${fullName}\nالبريد الإلكتروني: ${email}\nرقم الهاتف: ${phone}\nتاريخ الميلاد: ${dob}\nالعنوان: ${address}\nرقم الهوية: ${idNumber}`;
+                    var qrContainer = document.getElementById("qrCode");
+                    QRCode.toDataURL(dataToEncode, function (err, url) {
+                        var img = document.createElement('img');
+                        img.src = url;
+                        qrContainer.appendChild(img);
+                    });
+
+                    requestNumber++;
+
+                    document.getElementById("messageContainer").style.display = "block";
+                    setTimeout(function() {
+                        document.getElementById("messageContainer").style.display = "none";
+                    }, 5000);
+                }, 2000);
+            }
+        }
+
+        async function downloadAsPDF() {
+            const { jsPDF } = window.jspdf;
+            const confirmationElement = document.getElementById("confirmationSection");
+
+            html2canvas(confirmationElement, { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL("image/png");
+                const pdf = new jsPDF("p", "mm", "a4");
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfHeight = (imgProps.height * pageWidth) / imgProps.width;
+
+                pdf.addImage(imgData, "PNG", 0, 0, pageWidth, pdfHeight);
+                pdf.save("طلب_عضوية_برشلونة.pdf");
+            });
+        }
+
+        function sendToWhatsapp() {
+            var fullName = document.getElementById("fullName").value;
+            var email = document.getElementById("email").value;
+            var phone = document.getElementById("phone").value;
+            var dob = document.getElementById("dob").value;
+            var address = document.getElementById("address").value;
+            var idNumber = document.getElementById("idNumber").value;
+            
+            var message = `اسم المتقدم: ${fullName}%0Aالبريد الإلكتروني: ${email}%0Aرقم الهاتف: ${phone}%0Aتاريخ الميلاد: ${dob}%0Aالعنوان: ${address}%0Aرقم الهوية: ${idNumber}`;
+
+            var whatsappUrl = `https://wa.me/9647873654091?text=${message}`;
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
